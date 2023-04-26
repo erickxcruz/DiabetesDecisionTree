@@ -2,15 +2,18 @@ import numpy as np
 import pandas as pd
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import plot_tree
+from sklearn.tree import export_graphviz
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_val_score
 from sklearn.metrics import confusion_matrix
+from sklearn.metrics import classification_report
 from sklearn.metrics import _plot
 import matplotlib.pyplot as plt
 import graphviz
 
-df = pd.read_csv("data3.csv", skiprows=1, header=None)
+df = pd.read_csv("data.csv", skiprows=1, header=None)
 df.columns = ['Diabetes_012', 'HighBP', 'HighChol', 'CholCheck', 'BMI', 'Smoker', 'Stroke', 'HeartDiseaseorAttack',
               'PhysActivity', 'Fruits', 'Veggies', 'HvyAlcoholConsump', 'AnyHealthcare', 'NoDocbcCost', 'GenHlth',
               'MentHlth', 'PhysHlth', 'DiffWalk', 'Sex', 'Age', 'Education', 'Income']
@@ -37,7 +40,16 @@ plot_tree(dtc, filled=True, rounded=True, class_names=["No Diabetes", "Pre Diabe
           feature_names=X.columns
           )
 plt.title("Decision Tree Trained On Diabetes Factors")
-plt.show()
+##plt.show()
 #export_graphviz(dtc, out_file='tree.dot', filled=True, rounded=True, class_names=["No Diabetes", "Pre Diabetes", "Diabetes"], feature_names=X.columns)
 
+pred = dtc.predict(X_test)
+print(classification_report(y_test, pred, zero_division=1))
+print(confusion_matrix(y_test, pred))
+
+rfc = RandomForestClassifier(n_estimators=100, random_state=42)
+rfc.fit(X_train, y_train)
+rfc_pred = rfc.predict(X_test)
+print(classification_report(y_test, rfc_pred))
+print(confusion_matrix(y_test, pred))
 
