@@ -10,6 +10,8 @@ from sklearn.model_selection import cross_val_score
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import classification_report
 from sklearn.metrics import _plot
+import matplotlib
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import graphviz
 
@@ -35,7 +37,7 @@ print(y)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 dtc = DecisionTreeClassifier(random_state=42)
 dtc = dtc.fit(X_train, y_train)
-plt.figure(figsize=(100, 100), dpi = 100)
+plt.figure(figsize=(25, 25), dpi = 100)
 plot_tree(dtc, filled=True, rounded=True, class_names=["No Diabetes", "Pre Diabetes", "Diabetes"],
           feature_names=X.columns
           )
@@ -50,6 +52,11 @@ print(confusion_matrix(y_test, pred))
 rfc = RandomForestClassifier(n_estimators=100, random_state=42)
 rfc.fit(X_train, y_train)
 rfc_pred = rfc.predict(X_test)
+plt.figure(figsize=(25, 25), dpi = 100)
+plot_tree(rfc.estimators_[0], filled=True, rounded=True, class_names=["No Diabetes", "Pre Diabetes", "Diabetes"],
+          feature_names=X.columns
+          )
+plt.title("Random Forest Tree Trained On Diabetes Factors")
 print(classification_report(y_test, rfc_pred,  zero_division=1))
 print(confusion_matrix(y_test, pred))
 
@@ -104,7 +111,7 @@ pruned_pred = dtc_pruned.predict(X_test)
 
 print(classification_report(y_test, pruned_pred,  zero_division=1))
 print(confusion_matrix(y_test, pruned_pred))
-plt.figure(figsize=(100, 100), dpi = 100)
+plt.figure(figsize=(25, 25), dpi = 100)
 plot_tree(dtc_pruned, filled=True, rounded=True, class_names=["No Diabetes", "Pre Diabetes", "Diabetes"],
           feature_names=X.columns
           )
